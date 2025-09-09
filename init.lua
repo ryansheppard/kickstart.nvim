@@ -105,10 +105,15 @@ vim.o.number = true
 -- vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.o.mouse = 'a'
+-- vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
+
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter' }, {
+  command = 'silent! checktime',
+})
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -684,7 +689,11 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {
+          settings = { gopls = {
+            buildFlags = { '-tags=integration' },
+          } },
+        },
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -1015,6 +1024,12 @@ require('lazy').setup({
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
     build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+  },
+  {
+    'benomahony/uv.nvim',
+    opts = {
+      picker_integration = true,
+    },
   },
 }, {
   ui = {

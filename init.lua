@@ -90,6 +90,8 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.env.PATH = vim.env.HOME .. '/.local/share/mise/shims:' .. vim.env.PATH
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
@@ -256,7 +258,6 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'tpope/vim-surround',
   'tpope/vim-fugitive',
-  'tanvirtin/monokai.nvim',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -690,9 +691,12 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {
-          settings = { gopls = {
-            buildFlags = { '-tags=integration' },
-          } },
+          settings = {
+            gopls = {
+              buildFlags = { '-tags=integration' },
+              env = { GOFLAGS = '-tags=integration' },
+            },
+          },
         },
         -- pyright = {},
         -- rust_analyzer = {},
@@ -900,22 +904,31 @@ require('lazy').setup({
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
-    --
+
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'tanvirtin/monokai.nvim',
+    'loctvl842/monokai-pro.nvim',
+    name = 'monokai-pro',
+    lazy = false,
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('monokai').setup {
+      require('monokai-pro').setup {
         styles = {
-          comments = { italic = false }, -- Disable italics in comments
+          comment = { italic = false },
+          keyword = { italic = false }, -- any other keyword
+          type = { italic = false }, -- (preferred) int, long, char, etc
+          storageclass = { italic = false }, -- static, register, volatile, etc
+          structure = { italic = false }, -- struct, union, enum, etc
+          parameter = { italic = false }, -- parameter pass in function
+          annotation = { italic = false },
+          tag_attribute = { italic = false }, -- attribute of tag in reactjs
         },
       }
 
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'monokai'
+      vim.cmd.colorscheme 'monokai-pro-classic'
     end,
   },
 

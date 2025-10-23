@@ -636,14 +636,6 @@ require('lazy').setup({
         end,
       })
 
-      vim.lsp.config('terraformls', {})
-      vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-        pattern = { '*.tf', '*.tfvars' },
-        callback = function()
-          vim.lsp.buf.format()
-        end,
-      })
-
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
@@ -698,6 +690,7 @@ require('lazy').setup({
             },
           },
         },
+        terraformls = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -794,7 +787,8 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+        terraform = { 'terraform_fmt' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
